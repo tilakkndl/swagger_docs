@@ -1,0 +1,187 @@
+swagger: "2.0"
+info:
+  title: First Swagger documentation
+  description: This is the first company documentation
+  version: 1.0
+  contact:
+    email: tilakknlksd@gmail.com
+  liscence:
+    name: Apache 2.0
+    url: "http://apache.org"
+  servers:
+    -url: http://localhost:4000
+    description: This is my local server 
+    -url: http://mycomapny.com
+    description: This is my computer server
+
+schemes: [http, https]
+
+paths:
+# Return string
+  /string:
+    get:
+      summary: Returns a string
+      description: It is just returing a fake string.
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+            example: "A fake string"
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+# Returns a object
+  /user:
+    get:
+      summary: This returns a single Object
+      description: Returning a object
+      responses:
+        200:
+          description: Success
+          schema: 
+            type: object
+            properties:
+              id: 
+                type: integer
+              name:
+                type: string
+
+
+# Returning array of users
+  /users:
+    get:
+      summary: Returns array of users
+      description: Array Return
+      responses:
+        200:
+          description: Success
+            schema: 
+              type: array
+              items: 
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+
+
+
+
+# using params
+  /users/{userId}:
+    get:
+      summary: Returns Array of usrs
+      description: Array Return
+      parameters: 
+        - name: userId
+          in: path
+          required: true
+          schema: 
+            type: integer
+      responses:
+        200:
+          description: Success
+
+
+# # post json/body
+#   /create:
+#     post:
+#       summary: Posing Data
+#       produces:
+#         - application/json
+#       consumes:
+#         - applicatin/json
+#       parameters: 
+#         - in: body
+#           name: user
+#           schema:
+#             type: object
+#             properties: 
+#               id: 
+#                 type: integer
+#               name: 
+#                 type: string
+#       responses:
+#         200:
+#           description: ok
+
+
+
+# post json/body
+  /create:
+    post:
+      summary: Posing Data
+      produces:
+        - application/json
+      consumes:
+        - applicatin/json
+      parameters: 
+        - in: body
+          name: user
+          schema:
+           $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: ok
+
+
+
+
+#Query
+  /usersQuery:
+    get:
+      parameters:
+      - in: query
+        name: age
+        type: integer
+      - in: query
+        name: id
+        type: integer
+        enum: [1, 2, 3]
+      responses:
+        200:
+          description: ok
+
+
+#File Upload
+  /upload:
+    post:
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: file
+          type: file
+          required: true
+          description: File Upload
+        - in: formData
+          name: id
+          type: integer
+          required: true
+          description: ID of integer
+        - in: header
+          name: auth
+          schema:
+            type: string
+        - in: cookie
+          name: debug
+          schema: debug
+            type: string
+      responses:
+        200:
+          description: ok
+        
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name: 
+          type: string
